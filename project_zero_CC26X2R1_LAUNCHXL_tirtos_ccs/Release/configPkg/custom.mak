@@ -7,5 +7,5 @@
 #       or equal to the generated config header
 #
 linker.cmd: package/cfg/project_zero_app_pem4f.xdl
-	$(SED) 's"^\"\(package/cfg/project_zero_app_pem4fcfg.cmd\)\"$""\"C:/Users/arigd/Desktop/BLE/project_zero_CC26X2R1_LAUNCHXL_tirtos_ccs/Release/configPkg/\1\""' package/cfg/project_zero_app_pem4f.xdl > $@
+	$(SED) 's"^\"\(package/cfg/project_zero_app_pem4fcfg.cmd\)\"$""\"C:/Users/arigd/Desktop/BLE/projecto/project_zero_CC26X2R1_LAUNCHXL_tirtos_ccs/Release/configPkg/\1\""' package/cfg/project_zero_app_pem4f.xdl > $@
 	-$(SETDATE) -r:max package/cfg/project_zero_app_pem4f.h compiler.opt compiler.opt.defs

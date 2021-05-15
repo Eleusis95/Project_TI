@@ -1,7 +1,7 @@
 ******************************************************************************
                   TI ARM Linker PC v20.2.5                     
 ******************************************************************************
->> Linked Thu May 13 23:01:24 2021
+>> Linked Sat May 15 16:29:25 2021
 
 OUTPUT FILE NAME:   <project_zero_CC26X2R1_LAUNCHXL_tirtos_ccs.out>
 ENTRY POINT SYMBOL: "ResetISR"  address: 00017715
@@ -85,8 +85,8 @@ section   page    origin      length       input sections
 .vecs      0    20000000    000000d8     NOLOAD SECTION
                   20000000    000000d8     project_zero_app_pem4f.oem4f (.vecs)
 
-xdc.meta   0    00000000    0000010b     COPY SECTION
-                  00000000    0000010b     project_zero_app_pem4f.oem4f (xdc.meta)
+xdc.meta   0    00000000    00000114     COPY SECTION
+                  00000000    00000114     project_zero_app_pem4f.oem4f (xdc.meta)
 
 xdc.noload 
 *          0    00000000    00000000     COPY SECTION
@@ -1936,11 +1936,11 @@ MODULE SUMMARY
        Total:                                   260      406       17920  
                                                                           
     C:\Users\arigd\AppData\Local\Temp\
-       {1884EDC2-F8A9-4636-9D79-E6D92EE53CCE}   0        0         2309   
+       {99C2CC02-CDD1-404E-9440-295A70D0D3F5}   0        0         2309   
     +--+----------------------------------------+--------+---------+---------+
        Total:                                   0        0         2309   
                                                                           
-    C:\Users\arigd\Desktop\BLE\project_zero_CC26X2R1_LAUNCHXL_tirtos_ccs\Release\configPkg\package\cfg\
+    C:\Users\arigd\Desktop\BLE\projecto\project_zero_CC26X2R1_LAUNCHXL_tirtos_ccs\Release\configPkg\package\cfg\
        project_zero_app_pem4f.oem4f             994      1477      2054   
     +--+----------------------------------------+--------+---------+---------+
        Total:                                   994      1477      2054   
@@ -2077,7 +2077,7 @@ MODULE SUMMARY
     +--+----------------------------------------+--------+---------+---------+
        Total:                                   9734     1372      1318   
                                                                           
-    C:\Users\arigd\Desktop\BLE\project_zero_CC26X2R1_LAUNCHXL_tirtos_ccs\src\sysbios\rom_sysbios.aem4f
+    C:\Users\arigd\Desktop\BLE\projecto\project_zero_CC26X2R1_LAUNCHXL_tirtos_ccs\src\sysbios\rom_sysbios.aem4f
        rom_sysbios.obj                          1889     0         0      
        rom_sysbios_config.obj                   26       0         0      
     +--+----------------------------------------+--------+---------+---------+
@@ -4326,12 +4326,12 @@ UNDEFED   SHT$$INIT_ARRAY$$Limit
 1001f7ed  WL_SetWlIgnore                                                  
 1000b8c5  ZERO                                                            
 00000000  __ASM__                                                         
-00000088  __ISA__                                                         
-0000009b  __PLAT__                                                        
+00000091  __ISA__                                                         
+000000a4  __PLAT__                                                        
 20014000  __STACK_END                                                     
 00000400  __STACK_SIZE                                                    
 20014000  __STACK_TOP                                                     
-000000c2  __TARG__                                                        
+000000cb  __TARG__                                                        
 00020150  __TI_CINIT_Base                                                 
 000201b8  __TI_CINIT_Limit                                                
 000200e0  __TI_Handler_Table_Base                                         
@@ -4344,7 +4344,7 @@ ffffffff  __TI_prof_data_size
 ffffffff  __TI_prof_data_start                                            
 00000000  __TI_static_base__                                              
 0001ca65  __TI_zero_init                                                  
-000000e8  __TRDR__                                                        
+000000f1  __TRDR__                                                        
 00058000  __UNUSED_FLASH_end__                                            
 00000000  __UNUSED_FLASH_start__                                          
 20014000  __UNUSED_SRAM_end__                                             
@@ -6259,12 +6259,12 @@ address   name
 00000001  xdc_rov_runtime_Mon__write                                      
 00000001  xdc_runtime_Startup__EXECFXN__C                                 
 00000001  xdc_runtime_Startup__RESETFXN__C                                
-00000088  __ISA__                                                         
 00000090  prgEntryAddr                                                    
 00000090  ti_sysbios_family_arm_m3_Hwi_resetVectors                       
-0000009b  __PLAT__                                                        
-000000c2  __TARG__                                                        
-000000e8  __TRDR__                                                        
+00000091  __ISA__                                                         
+000000a4  __PLAT__                                                        
+000000cb  __TARG__                                                        
+000000f1  __TRDR__                                                        
 00000400  __STACK_SIZE                                                    
 00001be1  GAPBondMgr_Init                                                 
 000023ed  GAPBondMgr_ProcessGAPMsg                                        

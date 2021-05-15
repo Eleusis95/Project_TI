@@ -169,7 +169,7 @@ Startup/main.obj: C:/ti/simplelink_cc13x2_26x2_sdk_5_10_00_48/source/ti/ble5stac
 Startup/main.obj: C:/ti/simplelink_cc13x2_26x2_sdk_5_10_00_48/source/ti/ble5stack/inc/bcomdef.h
 Startup/main.obj: C:/ti/simplelink_cc13x2_26x2_sdk_5_10_00_48/source/ti/ble5stack/osal/src/inc/comdef.h
 Startup/main.obj: C:/ti/simplelink_cc13x2_26x2_sdk_5_10_00_48/source/ti/ble5stack/hal/src/target/_common/hal_types.h
-Startup/main.obj: C:/Users/arigd/Desktop/BLE/project_zero_CC26X2R1_LAUNCHXL_tirtos_ccs/Application/project_zero.h
+Startup/main.obj: C:/Users/arigd/Desktop/BLE/projecto/project_zero_CC26X2R1_LAUNCHXL_tirtos_ccs/Application/project_zero.h
 Startup/main.obj: C:/ti/simplelink_cc13x2_26x2_sdk_5_10_00_48/kernel/tirtos/packages/ti/sysbios/knl/Queue.h
 Startup/main.obj: C:/ti/simplelink_cc13x2_26x2_sdk_5_10_00_48/source/ti/drivers/PIN.h
 Startup/main.obj: C:/ti/simplelink_cc13x2_26x2_sdk_5_10_00_48/source/ti/ble5stack/icall/inc/ble_user_config.h
@@ -528,7 +528,7 @@ C:/ti/simplelink_cc13x2_26x2_sdk_5_10_00_48/source/ti/ble5stack/osal/src/inc/com
 
 C:/ti/simplelink_cc13x2_26x2_sdk_5_10_00_48/source/ti/ble5stack/hal/src/target/_common/hal_types.h:
 
-C:/Users/arigd/Desktop/BLE/project_zero_CC26X2R1_LAUNCHXL_tirtos_ccs/Application/project_zero.h:
+C:/Users/arigd/Desktop/BLE/projecto/project_zero_CC26X2R1_LAUNCHXL_tirtos_ccs/Application/project_zero.h:
 
 C:/ti/simplelink_cc13x2_26x2_sdk_5_10_00_48/kernel/tirtos/packages/ti/sysbios/knl/Queue.h:
 

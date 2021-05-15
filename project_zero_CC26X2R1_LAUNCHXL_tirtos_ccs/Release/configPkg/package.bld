@@ -11,7 +11,7 @@ var makeAssembly = false;
 var Executable = xdc.module('xdc.bld.Executable');
 
 var exeOpts = new Executable.Attrs({
-        cfgScript: 'C:/Users/arigd/Desktop/BLE/project_zero_CC26X2R1_LAUNCHXL_tirtos_ccs/project_zero_app.cfg',
+        cfgScript: 'C:/Users/arigd/Desktop/BLE/projecto/project_zero_CC26X2R1_LAUNCHXL_tirtos_ccs/project_zero_app.cfg',
         profile: 'release',
         cfgHome: 'configPkg',
 });
@@ -41,7 +41,7 @@ else {
 
 var thisObj = {
     cfg:        '../project_zero_app.cfg',
-    outputPath: 'C:/Users/arigd/Desktop/BLE/project_zero_CC26X2R1_LAUNCHXL_tirtos_ccs/Release/configPkg',
+    outputPath: 'C:/Users/arigd/Desktop/BLE/projecto/project_zero_CC26X2R1_LAUNCHXL_tirtos_ccs/Release/configPkg',
     exeName:    'project_zero_app' + suffix,
     exeIntName: 'project_zero_app' + suffix.replace('.', '_'),
     targ:       targ,

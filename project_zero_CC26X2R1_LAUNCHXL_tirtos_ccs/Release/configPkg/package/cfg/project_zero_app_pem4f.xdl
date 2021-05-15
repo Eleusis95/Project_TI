@@ -9,8 +9,8 @@
  */
 
 
--l"C:\Users\arigd\Desktop\BLE\project_zero_CC26X2R1_LAUNCHXL_tirtos_ccs\Release\configPkg\package\cfg\project_zero_app_pem4f.oem4f"
--l"C:\Users\arigd\Desktop\BLE\project_zero_CC26X2R1_LAUNCHXL_tirtos_ccs\src\sysbios\rom_sysbios.aem4f"
+-l"C:\Users\arigd\Desktop\BLE\projecto\project_zero_CC26X2R1_LAUNCHXL_tirtos_ccs\Release\configPkg\package\cfg\project_zero_app_pem4f.oem4f"
+-l"C:\Users\arigd\Desktop\BLE\projecto\project_zero_CC26X2R1_LAUNCHXL_tirtos_ccs\src\sysbios\rom_sysbios.aem4f"
 -l"C:\ti\simplelink_cc13x2_26x2_sdk_5_10_00_48\kernel\tirtos\packages\ti\targets\arm\rtsarm\lib\boot.aem4f"
 -l"C:\ti\simplelink_cc13x2_26x2_sdk_5_10_00_48\kernel\tirtos\packages\ti\targets\arm\rtsarm\lib\auto_init.aem4f"
 -l"C:\ti\ccs1030\xdctools_3_62_00_08_core\packages\xdc\rov\runtime\lib\xdc.rov.runtime.aem4f"

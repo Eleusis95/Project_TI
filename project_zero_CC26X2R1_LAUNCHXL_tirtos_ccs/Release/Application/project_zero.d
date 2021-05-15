@@ -286,7 +286,7 @@ Application/project_zero.obj: C:/ti/simplelink_cc13x2_26x2_sdk_5_10_00_48/kernel
 Application/project_zero.obj: C:/ti/simplelink_cc13x2_26x2_sdk_5_10_00_48/source/ti/common/cc26xx/oad/oad_image_header.h
 Application/project_zero.obj: C:/ti/simplelink_cc13x2_26x2_sdk_5_10_00_48/source/ti/drivers/dpl/HwiP.h
 Application/project_zero.obj: C:/ti/simplelink_cc13x2_26x2_sdk_5_10_00_48/source/ti/drivers/NVS.h
-Application/project_zero.obj: C:/Users/arigd/Desktop/BLE/project_zero_CC26X2R1_LAUNCHXL_tirtos_ccs/Application/project_zero.h
+Application/project_zero.obj: C:/Users/arigd/Desktop/BLE/projecto/project_zero_CC26X2R1_LAUNCHXL_tirtos_ccs/Application/project_zero.h
 Application/project_zero.obj: C:/ti/simplelink_cc13x2_26x2_sdk_5_10_00_48/kernel/tirtos/packages/ti/sysbios/knl/Queue.h
 Application/project_zero.obj: syscfg/ti_ble_config.h
 Application/project_zero.obj: syscfg/ti_radio_config.h
@@ -867,7 +867,7 @@ C:/ti/simplelink_cc13x2_26x2_sdk_5_10_00_48/source/ti/drivers/dpl/HwiP.h:
 
 C:/ti/simplelink_cc13x2_26x2_sdk_5_10_00_48/source/ti/drivers/NVS.h:
 
-C:/Users/arigd/Desktop/BLE/project_zero_CC26X2R1_LAUNCHXL_tirtos_ccs/Application/project_zero.h:
+C:/Users/arigd/Desktop/BLE/projecto/project_zero_CC26X2R1_LAUNCHXL_tirtos_ccs/Application/project_zero.h:
 
 C:/ti/simplelink_cc13x2_26x2_sdk_5_10_00_48/kernel/tirtos/packages/ti/sysbios/knl/Queue.h:
 
