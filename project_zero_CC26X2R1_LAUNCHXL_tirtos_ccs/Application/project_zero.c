@@ -91,6 +91,11 @@
 #include "ti_ble_config.h"
 #include <util.h>
 
+/*  disassembly   */
+#include "disassembly/disassambler.h"
+#include "commands/Tables.h"
+#include "aes/aes.h"
+
 /*********************************************************************
  * MACROS
  */
@@ -145,6 +150,8 @@
 // Connection interval conversion rate to miliseconds
 #define CONN_INTERVAL_MS_CONVERSION           1.25
 
+// message sizes
+#define msgSize 44
 /*********************************************************************
  * TYPEDEFS
  */
@@ -409,6 +416,11 @@ static void ProjectZero_processOadWriteCB(uint8_t event,
                                           uint16_t arg);
 static void ProjectZero_processL2CAPMsg(l2capSignalEvent_t *pMsg);
 static void ProjectZero_checkSvcChgndFlag(uint32_t flag);
+
+/**************************disassembler***********************/
+static uint8_t checkingsize(uint8_t receivedmsg[]);
+static uint8_t dividongMsg(uint8_t receivedmsg[]);
+static uint8_t gettingCommand(uint8_t receivedmsg[]);
 
 
 /*********************************************************************
@@ -1941,7 +1953,7 @@ void ProjectZero_DataService_ValueChangeHandler(
     // Value to hold the received string for printing via Log, as Log printouts
     // happen in the Idle task, and so need to refer to a global/static variable.
     static uint8_t received_string[DS_STRING_LEN] = {0};
-
+    uint8_t statusMsg = 0;
     switch(pCharData->paramID)
     {
     case DS_STRING_ID:
@@ -1957,6 +1969,7 @@ void ProjectZero_DataService_ValueChangeHandler(
                   (uintptr_t)"Data Service",
                   (uintptr_t)"String",
                   (uintptr_t)received_string);
+        statusMsg = checkingsize(received_string);
         break;
 
     case DS_STREAM_ID:
@@ -2410,6 +2423,118 @@ void projectZero_eraseExternalFlash(void)
     Log_info0("External flash erase complete");
     NVS_close(nvsHandle);
 }
+static uint8_t checkingsize(uint8_t receivedmsg[]){
+    size_t msgLen =  (const char)strlen(receivedmsg);
+    uint8_t OK;
+    if(msgLen == 47){
+       // Log_info1("The message's len is correct %d", (uintptr_t)msgLen);
+        OK = dividongMsg(receivedmsg);
+        return 1;
+    }
+    else{
+        return 0;
+    }
+}
+static uint8_t dividongMsg(uint8_t receivedmsg[]){
 
+    uint8_t *Msg;
+    uint8_t ok;
+    Msg = (uint8_t*)malloc(msgSize*sizeof(uint8_t));
+    Msg = &receivedmsg[3];
+   // Log_info1("The message without garbage is :  %s", (uintptr_t)Msg);
+    ok = gettingCommand(Msg);
+    return 1;
+
+
+}
+static uint8_t gettingCommand(uint8_t receivedmsg[]){
+
+    frame_segtion myframe_segtion;
+    frame_convert frameconverted;
+    public_key_type publicKey;
+    uint8_t padded_msg[512] = { 0 }; /* array to save plain text and endrypted message */
+    /*disassembling msg*/
+    myframe_segtion = disassambler_fuction((char*)receivedmsg);
+  //  Log_info1("ID: %s\n", myframe_segtion.ID);
+  //  Log_info1("Public Key: %s\n", myframe_segtion.PublicKey);
+  //  Log_info1("Encrypted message: %s\n", myframe_segtion.EncryptedMssg);
+
+    frameconverted = convertions(myframe_segtion);
+  //  Log_info0("Public Key\n");
+    for (int i = 0; i < publicKey_len; i++) {
+ //       Log_info1("0x%02x,", frameconverted.uPublicKey[i]);
+       }
+ //   Log_info1("\nID: %u", frameconverted.uID);
+ //   Log_info0("\nEncrypted message : ");
+    for (int i = 0; i < encryptedmsg_len; i++) {
+  //      Log_info1("0x%02x,", frameconverted.uEncryptedMsg[i]);
+       }
+    /*getting private key*/
+    publicKey.uIDPrivateKey = frameconverted.uID;
+    publicKey.uPrivateKey =getting_private_key(publicKey.uIDPrivateKey);
+
+   // Log_info0("\nprivate key : ");
+     for (int x = 0; x < 12; x++) {
+  //       Log_info1("0x%02x,", publicKey.uPrivateKey.Data[x]);
+      }
+     /***************AES**********************/
+     /*ensamble de llave aes*/
+     aes_special_key key;
+     tuint128 plain_text;
+     key.PrivateKey = publicKey.uPrivateKey;
+    enum Actions_tasks actionfound;
+    memcpy(key.PublicKey.Data, frameconverted.uPublicKey, 4);
+    memcpy(key.PrivateKey.Data, publicKey.uPrivateKey.Data, 12);
+
+    get16Key(&key);
+ //   Log_info0("\n Aes Key :");
+    for (int x = 0; x < 16; x++) {
+   //     Log_info1("0x%02x,", key.AESKey.Data[x]);
+     }
+
+     struct AES_ctx ctx;
+     AES_init_ctx(&ctx, key.AESKey.Data);
+     memcpy(padded_msg, frameconverted.uEncryptedMsg, 16);
+     AES_ECB_decrypt(&ctx, padded_msg);
+
+  //   Log_info0("\nDecrypted message : ");
+     for (int i = 0; i < encryptedmsg_len; i++) {
+    //     Log_info1("0x%02x,", padded_msg[i]);
+      }
+     memcpy(plain_text.Data, padded_msg,16);
+     actionfound = command_number(plain_text);
+     switch (actionfound)
+          {
+           case Lock:
+               Log_info0("\n command : Lock\n");
+             break;
+           case UnLock:
+               Log_info0("\n command : UnLock\n");
+             break;
+          case Truck:
+              Log_info0("\n command : Truck\n");
+             break;
+          case Light:
+              Log_info0("\n command : Light\n");
+             break;
+          case Engine:
+              Log_info0("\n command : Engine\n");
+              break;
+          case Horn:
+              Log_info0("\n command : Horn\n");
+             break;
+          case Panic:
+              Log_info0("\n command : Panic\n");
+             break;
+          case NoAction:
+              Log_info0("\n command : NoAction\n");
+              break;
+             default:
+             break;
+               }
+
+    return 1;
+
+}
 /*********************************************************************
 *********************************************************************/
