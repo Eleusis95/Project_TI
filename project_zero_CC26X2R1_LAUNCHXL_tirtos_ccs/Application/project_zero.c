@@ -96,6 +96,10 @@
 #include "commands/Tables.h"
 #include "aes/aes.h"
 
+/*OUTPUTS*/
+static PIN_Handle ledPinHandle;
+static PIN_State ledPinState;
+
 /*********************************************************************
  * MACROS
  */
@@ -298,7 +302,23 @@ static List_List paramUpdateList;
 PIN_Config ledPinTable[] = {
     CONFIG_PIN_RLED | PIN_GPIO_OUTPUT_EN | PIN_GPIO_LOW | PIN_PUSHPULL |
     PIN_DRVSTR_MAX,
-    CONFIG_PIN_GLED | PIN_GPIO_OUTPUT_EN | PIN_GPIO_LOW | PIN_PUSHPULL |
+    CONFIG_PIN_GLED | PIN_GPIO_OUTPUT_EN | PIN_GPIO_HIGH | PIN_PUSHPULL |
+    PIN_DRVSTR_MAX,
+    CONFIG_GPIO_LOCK | PIN_GPIO_OUTPUT_EN | PIN_GPIO_LOW | PIN_PUSHPULL |
+    PIN_DRVSTR_MAX,
+    CONFIG_GPIO_UNLOCK | PIN_GPIO_OUTPUT_EN | PIN_GPIO_LOW | PIN_PUSHPULL |
+    PIN_DRVSTR_MAX,
+    CONFIG_GPIO_TRUNK | PIN_GPIO_OUTPUT_EN | PIN_GPIO_LOW | PIN_PUSHPULL |
+    PIN_DRVSTR_MAX,
+    CONFIG_GPIO_LIGHT | PIN_GPIO_OUTPUT_EN | PIN_GPIO_LOW | PIN_PUSHPULL |
+    PIN_DRVSTR_MAX,
+    CONFIG_GPIO_ENGINE | PIN_GPIO_OUTPUT_EN | PIN_GPIO_LOW | PIN_PUSHPULL |
+    PIN_DRVSTR_MAX,
+    CONFIG_GPIO_HORN | PIN_GPIO_OUTPUT_EN | PIN_GPIO_LOW | PIN_PUSHPULL |
+    PIN_DRVSTR_MAX,
+    CONFIG_GPIO_PANIC | PIN_GPIO_OUTPUT_EN | PIN_GPIO_LOW | PIN_PUSHPULL |
+    PIN_DRVSTR_MAX,
+    CONFIG_GPIO_PROCESS | PIN_GPIO_OUTPUT_EN | PIN_GPIO_LOW | PIN_PUSHPULL |
     PIN_DRVSTR_MAX,
     PIN_TERMINATE
 };
@@ -516,6 +536,13 @@ static void ProjectZero_init(void)
     // ******************************************************************
     // Hardware initialization
     // ******************************************************************
+        ledPinHandle = PIN_open(&ledPinState, ledPinTable);
+       if(!ledPinHandle)
+       {
+           Log_error0("Error initializing board LED pins");
+           Task_exit();
+       }
+
 
     // Set the Device Name characteristic in the GAP GATT Service
     // For more information, see the section in the User's Guide:
@@ -2507,23 +2534,30 @@ static uint8_t gettingCommand(uint8_t receivedmsg[]){
           {
            case Lock:
                Log_info0("\n command : Lock\n");
+               PIN_setOutputValue(ledPinHandle, CONFIG_PIN_RLED, 1);
              break;
            case UnLock:
+               PIN_setOutputValue(ledPinHandle, CONFIG_PIN_RLED, 0);
                Log_info0("\n command : UnLock\n");
              break;
           case Truck:
+              PIN_setOutputValue(ledPinHandle, CONFIG_GPIO_TRUNK, 1);
               Log_info0("\n command : Truck\n");
              break;
           case Light:
+              PIN_setOutputValue(ledPinHandle, CONFIG_GPIO_LIGHT, 1);
               Log_info0("\n command : Light\n");
              break;
           case Engine:
+              PIN_setOutputValue(ledPinHandle, CONFIG_GPIO_ENGINE, 1);
               Log_info0("\n command : Engine\n");
               break;
           case Horn:
+              PIN_setOutputValue(ledPinHandle, CONFIG_GPIO_HORN, 1);
               Log_info0("\n command : Horn\n");
              break;
           case Panic:
+              PIN_setOutputValue(ledPinHandle, CONFIG_GPIO_PANIC, 1);
               Log_info0("\n command : Panic\n");
              break;
           case NoAction:
