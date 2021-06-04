@@ -146,7 +146,19 @@ static PIN_State ledPinState;
 #define PZ_START_ADV_EVT         7  /* Request advertisement start from task ctx   */
 #define PZ_SEND_PARAM_UPD_EVT    8  /* Request parameter update req be sent        */
 #define PZ_CONN_EVT              9  /* Connection Event End notice                 */
-#define PZ_READ_RPA_EVT         10  /* Read RPA event                              */
+#define PZ_READ_RPA_EVT         10  /* Read RPA event
+                         */
+
+/*Output pins*/
+#define OutPut_LOCK CONFIG_PIN_4
+#define OutPut_UNLOCK CONFIG_PIN_5
+#define OutPut_TRUNK CONFIG_PIN_6
+#define OutPut_LIGHT CONFIG_PIN_7
+#define OutPut_ENGINE CONFIG_PIN_8
+#define OutPut_HORN CONFIG_PIN_9
+#define OutPut_PANIC CONFIG_PIN_10
+#define OutPut_PROCESS CONFIG_PIN_11
+
 
 // Supervision timeout conversion rate to miliseconds
 #define CONN_TIMEOUT_MS_CONVERSION            10
@@ -304,21 +316,21 @@ PIN_Config ledPinTable[] = {
     PIN_DRVSTR_MAX,
     CONFIG_PIN_GLED | PIN_GPIO_OUTPUT_EN | PIN_GPIO_HIGH | PIN_PUSHPULL |
     PIN_DRVSTR_MAX,
-    CONFIG_GPIO_LOCK | PIN_GPIO_OUTPUT_EN | PIN_GPIO_LOW | PIN_PUSHPULL |
+    OutPut_LOCK | PIN_GPIO_OUTPUT_EN | PIN_GPIO_LOW | PIN_PUSHPULL |
     PIN_DRVSTR_MAX,
-    CONFIG_GPIO_UNLOCK | PIN_GPIO_OUTPUT_EN | PIN_GPIO_LOW | PIN_PUSHPULL |
+    OutPut_UNLOCK | PIN_GPIO_OUTPUT_EN | PIN_GPIO_LOW | PIN_PUSHPULL |
     PIN_DRVSTR_MAX,
-    CONFIG_GPIO_TRUNK | PIN_GPIO_OUTPUT_EN | PIN_GPIO_LOW | PIN_PUSHPULL |
+    OutPut_TRUNK | PIN_GPIO_OUTPUT_EN | PIN_GPIO_LOW | PIN_PUSHPULL |
     PIN_DRVSTR_MAX,
-    CONFIG_GPIO_LIGHT | PIN_GPIO_OUTPUT_EN | PIN_GPIO_LOW | PIN_PUSHPULL |
+    OutPut_LIGHT | PIN_GPIO_OUTPUT_EN | PIN_GPIO_LOW | PIN_PUSHPULL |
     PIN_DRVSTR_MAX,
-    CONFIG_GPIO_ENGINE | PIN_GPIO_OUTPUT_EN | PIN_GPIO_LOW | PIN_PUSHPULL |
+    OutPut_ENGINE | PIN_GPIO_OUTPUT_EN | PIN_GPIO_LOW | PIN_PUSHPULL |
     PIN_DRVSTR_MAX,
-    CONFIG_GPIO_HORN | PIN_GPIO_OUTPUT_EN | PIN_GPIO_LOW | PIN_PUSHPULL |
+    OutPut_HORN | PIN_GPIO_OUTPUT_EN | PIN_GPIO_LOW | PIN_PUSHPULL |
     PIN_DRVSTR_MAX,
-    CONFIG_GPIO_PANIC | PIN_GPIO_OUTPUT_EN | PIN_GPIO_LOW | PIN_PUSHPULL |
+    OutPut_PANIC | PIN_GPIO_OUTPUT_EN | PIN_GPIO_LOW | PIN_PUSHPULL |
     PIN_DRVSTR_MAX,
-    CONFIG_GPIO_PROCESS | PIN_GPIO_OUTPUT_EN | PIN_GPIO_LOW | PIN_PUSHPULL |
+    OutPut_PROCESS | PIN_GPIO_OUTPUT_EN | PIN_GPIO_LOW | PIN_PUSHPULL |
     PIN_DRVSTR_MAX,
     PIN_TERMINATE
 };
@@ -491,6 +503,13 @@ static void project_zero_spin(void)
   {
     x++;
   }
+}
+static void delay(void){
+    float y = 0;
+    for(int x = 0; x <= 10000;x++){
+            y = x/1000;
+            Log_info0(".");
+    }
 }
 
 /*********************************************************************
@@ -2480,6 +2499,8 @@ static uint8_t gettingCommand(uint8_t receivedmsg[]){
     frame_convert frameconverted;
     public_key_type publicKey;
     uint8_t padded_msg[512] = { 0 }; /* array to save plain text and endrypted message */
+    uint32_t lightState = 0;
+    uint32_t engineState = 0;
     /*disassembling msg*/
     myframe_segtion = disassambler_fuction((char*)receivedmsg);
   //  Log_info1("ID: %s\n", myframe_segtion.ID);
@@ -2533,31 +2554,46 @@ static uint8_t gettingCommand(uint8_t receivedmsg[]){
      switch (actionfound)
           {
            case Lock:
+               PIN_setOutputValue(ledPinHandle, OutPut_LOCK, 1);
+               PIN_setOutputValue(ledPinHandle, OutPut_TRUNK, 1);
                Log_info0("\n command : Lock\n");
-               PIN_setOutputValue(ledPinHandle, CONFIG_PIN_RLED, 1);
              break;
            case UnLock:
-               PIN_setOutputValue(ledPinHandle, CONFIG_PIN_RLED, 0);
+               PIN_setOutputValue(ledPinHandle, OutPut_LOCK, 0);
                Log_info0("\n command : UnLock\n");
              break;
           case Truck:
-              PIN_setOutputValue(ledPinHandle, CONFIG_GPIO_TRUNK, 1);
+              PIN_setOutputValue(ledPinHandle, OutPut_TRUNK, 0);
               Log_info0("\n command : Truck\n");
              break;
           case Light:
-              PIN_setOutputValue(ledPinHandle, CONFIG_GPIO_LIGHT, 1);
+              lightState = !(PIN_getOutputValue(OutPut_LIGHT));
+              PIN_setOutputValue(ledPinHandle, OutPut_LIGHT, lightState);
               Log_info0("\n command : Light\n");
              break;
           case Engine:
-              PIN_setOutputValue(ledPinHandle, CONFIG_GPIO_ENGINE, 1);
+              engineState = !(PIN_getOutputValue(OutPut_ENGINE));
+              PIN_setOutputValue(ledPinHandle, OutPut_ENGINE, 1);
               Log_info0("\n command : Engine\n");
               break;
           case Horn:
-              PIN_setOutputValue(ledPinHandle, CONFIG_GPIO_HORN, 1);
+              for(int x =0 ; x < 3;x ++){
+              PIN_setOutputValue(ledPinHandle, OutPut_HORN, 1);
+              delay();
+              PIN_setOutputValue(ledPinHandle, OutPut_HORN, 0);
+              delay();
+              }
               Log_info0("\n command : Horn\n");
              break;
           case Panic:
-              PIN_setOutputValue(ledPinHandle, CONFIG_GPIO_PANIC, 1);
+              for(int x =0 ; x < 3;x ++){
+                  PIN_setOutputValue(ledPinHandle, OutPut_HORN, 1);
+                  PIN_setOutputValue(ledPinHandle, OutPut_LIGHT, 1);
+                  delay();
+                  PIN_setOutputValue(ledPinHandle, OutPut_HORN, 0);
+                  PIN_setOutputValue(ledPinHandle, OutPut_LIGHT, 0);
+                  delay();
+                 }
               Log_info0("\n command : Panic\n");
              break;
           case NoAction:

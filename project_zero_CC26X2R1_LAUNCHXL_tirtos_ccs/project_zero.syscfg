@@ -1,211 +1,201 @@
-/*
- * Copyright (c) 2018, Texas Instruments Incorporated
- * All rights reserved.
- *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions
- * are met:
- *
- * *  Redistributions of source code must retain the above copyright
- *    notice, this list of conditions and the following disclaimer.
- *
- * *  Redistributions in binary form must reproduce the above copyright
- *    notice, this list of conditions and the following disclaimer in the
- *    documentation and/or other materials provided with the distribution.
- *
- * *  Neither the name of Texas Instruments Incorporated nor the names of
- *    its contributors may be used to endorse or promote products derived
- *    from this software without specific prior written permission.
- *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
- * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
- * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
- * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR
- * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
- * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
- * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS;
- * OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
- * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR
- * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
- * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- */
-// @cliArgs --board /ti/boards/CC26X2R1_LAUNCHXL
-
-/*
- *  project_zero.syscfg
+/**
+ * These arguments were used when this file was generated. They will be automatically applied on subsequent loads
+ * via the GUI or CLI. Run CLI with '--help' for additional information on how to override these arguments.
+ * @cliArgs --board "/ti/boards/CC26X2R1_LAUNCHXL" --product "simplelink_cc13x2_26x2_sdk@5.10.00.48"
+ * @versions {"data":"2021031521","timestamp":"2021031521","tool":"1.8.0+1863","templates":null}
  */
 
-const lpName = system.getScript("/ti/ble5stack/ble_common.js").getBoardOrLaunchPadName(true);
+/**
+ * Import the modules used in this configuration.
+ */
+const ble         = scripting.addModule("/ti/ble5stack/ble");
+const CCFG        = scripting.addModule("/ti/devices/CCFG");
+const rfdesign    = scripting.addModule("/ti/devices/radioconfig/rfdesign");
+const Display     = scripting.addModule("/ti/display/Display");
+const Display1    = Display.addInstance();
+const AESCCM      = scripting.addModule("/ti/drivers/AESCCM");
+const AESCCM1     = AESCCM.addInstance();
+const AESCTRDRBG  = scripting.addModule("/ti/drivers/AESCTRDRBG");
+const AESCTRDRBG1 = AESCTRDRBG.addInstance();
+const AESECB      = scripting.addModule("/ti/drivers/AESECB");
+const AESECB1     = AESECB.addInstance();
+const ECDH        = scripting.addModule("/ti/drivers/ECDH");
+const ECDH1       = ECDH.addInstance();
+const GPIO        = scripting.addModule("/ti/drivers/GPIO");
+const GPIO1       = GPIO.addInstance();
+const GPIO2       = GPIO.addInstance();
+const GPIO3       = GPIO.addInstance();
+const GPIO4       = GPIO.addInstance();
+const GPIO6       = GPIO.addInstance();
+const GPIO7       = GPIO.addInstance();
+const GPIO8       = GPIO.addInstance();
+const GPIO9       = GPIO.addInstance();
+const GPIO10      = GPIO.addInstance();
+const GPIO11      = GPIO.addInstance();
+const GPIO12      = GPIO.addInstance();
+const GPIO13      = GPIO.addInstance();
+const NVS         = scripting.addModule("/ti/drivers/NVS");
+const NVS1        = NVS.addInstance();
+const NVS2        = NVS.addInstance();
+const Power       = scripting.addModule("/ti/drivers/Power");
+const RF          = scripting.addModule("/ti/drivers/RF");
+const RTOS        = scripting.addModule("/ti/drivers/RTOS");
+const TRNG        = scripting.addModule("/ti/drivers/TRNG");
+const TRNG1       = TRNG.addInstance();
 
-/* ======== RTOS ======== */
-var RTOS = scripting.addModule("/ti/drivers/RTOS");
-
-/* ======== AESCCM ======== */
-var AESCCM = scripting.addModule("/ti/drivers/AESCCM");
-var aesccm = AESCCM.addInstance();
-aesccm.$name = "CONFIG_AESCCM0";
-
-/* ======== AESECB ======== */
-var AESECB = scripting.addModule("/ti/drivers/AESECB");
-var aesecb = AESECB.addInstance();
-aesecb.$name = "CONFIG_AESECB0";
-
-/* ======== ECDH ======== */
-var ECDH = scripting.addModule("/ti/drivers/ECDH");
-var ecdh = ECDH.addInstance();
-ecdh.$name = "CONFIG_ECDH0"
-
-/* ======== AESCTRDRBG ======== */
-var AESCTRDRBG = scripting.addModule("/ti/drivers/AESCTRDRBG");
-var aesctrdrbg = AESCTRDRBG.addInstance();
-aesctrdrbg.$name = "CONFIG_AESCTRDRBG_0";
-aesctrdrbg.aesctrObject.$name = "CONFIG_AESCTR_0";
-
-/* ======== Display ======== */
-var Display = scripting.addModule("/ti/display/Display");
-var displayUART = Display.addInstance();
-displayUART.$hardware = system.deviceData.board.components.XDS110UART;
-displayUART.enableANSI = true;
-displayUART.uartBufferSize = 128;
-displayUART.uart.txPinInstance.outputState = "High";
-displayUART.uart.$name = "CONFIG_DISPLAY_UART";
-displayUART.uart.txPinInstance.$name = "CONFIG_PIN_UART_TX";
-displayUART.uart.rxPinInstance.$name = "CONFIG_PIN_UART_RX";
-
-/* ======== GPIO ======== */
-var GPIO = scripting.addModule("/ti/drivers/GPIO");
-
-var gpio0 = GPIO.addInstance();
-gpio0.$hardware = system.deviceData.board.components.BUTTON0;
-gpio0.mode = "Dynamic";
-gpio0.$name = "CONFIG_GPIO_BTN1";
-gpio0.pinInstance.$name = "CONFIG_PIN_BTN1";
-
-var gpio1 = GPIO.addInstance();
-gpio1.$hardware = system.deviceData.board.components.BUTTON1;
-gpio1.mode = "Dynamic";
-gpio1.$name = "CONFIG_GPIO_BTN2";
-gpio1.pinInstance.$name = "CONFIG_PIN_BTN2";
-
-var gpio2 = GPIO.addInstance();
-gpio2.$hardware = system.deviceData.board.components.LED0;
-gpio2.mode = "Dynamic";
-gpio2.$name = "CONFIG_GPIO_RLED";
-gpio2.pinInstance.$name = "CONFIG_PIN_RLED";
-
-var gpio3 = GPIO.addInstance();
-gpio3.$hardware = system.deviceData.board.components.LED1;
-gpio3.mode = "Dynamic";
-gpio3.$name = "CONFIG_GPIO_GLED";
-gpio3.pinInstance.$name = "CONFIG_PIN_GLED";
-
-/* ======== NVS ======== */
-var NVS = scripting.addModule("/ti/drivers/NVS");
-
-var nvsInt = NVS.addInstance();
-nvsInt.internalFlash.regionBase   = 0x48000;
-nvsInt.internalFlash.regionSize   = 0x4000;
-nvsInt.$name = "CONFIG_NVSINTERNAL";
-
-var nvsExt = NVS.addInstance();
-nvsExt.$hardware = system.deviceData.board.components.MX25R8035F;
-nvsExt.$name = "CONFIG_NVSEXTERNAL";
-nvsExt.externalFlash.regionSize = 1048576;
-// Verify Buffer Size - Size of the write verification buffer in bytes.
-nvsExt.externalFlash.verifyBufferSize = 64;
-
-/* ======== RF ======== */
-var RF = scripting.addModule("/ti/drivers/RF");
-
-/* if an antenna component exists, assign it to the rf instance */
-if (system.deviceData.board && system.deviceData.board.components.RF) {
-    RF.$hardware = system.deviceData.board.components.RF;
-}
-
-/* ======== POWER ======== */
-var Power = scripting.addModule("/ti/drivers/Power");
-
-if(lpName == "LP_CC2652RB")
-{
-  RF.xoscNeeded = false;
-  Power.calibrateRCOSC_HF = false;
-}
-/* ======== TRNG ======== */
-var TRNG = scripting.addModule("/ti/drivers/TRNG");
-var trng = TRNG.addInstance();
-
-/* ======== Device ======== */
-// Temporarily disable ti_devices_config.c generation
-var device = scripting.addModule("ti/devices/CCFG");
-device.enableCodeGeneration = false;
-
-/* ======== RF Design ======== */
-var rfDesign = scripting.addModule("ti/devices/radioconfig/rfdesign");
-const rfDesignSettings = system.getScript("/ti/common/lprf_rf_design_settings.js").rfDesignSettings;
-for(var setting in rfDesignSettings)
-{
-    rfDesign[setting] = rfDesignSettings[setting];
-}
-
-const radioSettings = system.getScript("/ti/ble5stack/ble_common.js").getRadioScript(rfDesign.rfDesign,system.deviceData.deviceId);
-const bleRfDesignSettings = radioSettings.rfDesignParams;
-for(var setting in bleRfDesignSettings)
-{
-    rfDesign[setting] = bleRfDesignSettings[setting];
-}
-
-/* ======== BLE ======== */
-var ble = scripting.addModule("/ti/ble5stack/ble");
-ble.rfDesign = rfDesignSettings.rfDesign;
-ble.deviceRole = "PERIPHERAL_CFG";
-ble.lockProject = true;
-if(lpName == "LP_CC2652RB")
-{
-    ble.deviceName = "Project Zero BAW"
-}
-else
-{
-    ble.deviceName = "Project Zero";
-}
-ble.addressMode = "ADDRMODE_PUBLIC";
-
-// Disable the Display Module
-ble.disableDisplayModule = true;
-ble.uartLog = true;
-
-// Maximum size of PDU (bytes)
-ble.maxPDUSize = 251;
-// Maximum Number of Connections
-ble.maxConnNum = 2;
-
-// Update Connection Timeout (ms)
-ble.connUpdateParamsPeripheral.reqConnTo = 2000;
-// Update Max Connection Interval (ms)
-ble.connUpdateParamsPeripheral.reqMaxConnInt = 45;
-// Update Min Connection Interval (ms)
-ble.connUpdateParamsPeripheral.reqMinConnInt = 15;
-
-// Number of Advertisement Sets
-ble.numOfAdvSets = 1;
-ble.numOfDefAdvSets = 1;
-// Gap Advertising Flags
-ble.advSet1.advData1.GAP_ADTYPE_FLAGS = true;
-// Advertising Flags
-ble.advSet1.advData1.advertisingFlags = ["GAP_ADTYPE_FLAGS_BREDR_NOT_SUPPORTED","GAP_ADTYPE_FLAGS_GENERAL"];
-// Complete local name
+/**
+ * Write custom configuration values to the imported modules.
+ */
+ble.lockProject                                     = true;
+ble.deviceName                                      = "Project Zero";
+ble.addressMode                                     = "ADDRMODE_PUBLIC";
+ble.disableDisplayModule                            = true;
+ble.uartLog                                         = true;
+ble.maxPDUSize                                      = 251;
+ble.maxConnNum                                      = 2;
+ble.numOfAdvSets                                    = 1;
+ble.numOfDefAdvSets                                 = 1;
+ble.radioConfig.codeExportConfig.$name              = "ti_devices_radioconfig_code_export_param0";
+ble.connUpdateParamsPeripheral.$name                = "ti_ble5stack_general_ble_conn_update_params0";
+ble.connUpdateParamsPeripheral.reqConnTo            = 2000;
+ble.connUpdateParamsPeripheral.reqMaxConnInt        = 45;
+ble.connUpdateParamsPeripheral.reqMinConnInt        = 15;
+ble.advSet1.$name                                   = "ti_ble5stack_broadcaster_advertisement_set0";
+ble.advSet1.advParam1.$name                         = "ti_ble5stack_broadcaster_advertisement_params0";
+ble.advSet1.advData1.$name                          = "ti_ble5stack_broadcaster_advertisement_data0";
+ble.advSet1.advData1.GAP_ADTYPE_FLAGS               = true;
+ble.advSet1.advData1.advertisingFlags               = ["GAP_ADTYPE_FLAGS_BREDR_NOT_SUPPORTED","GAP_ADTYPE_FLAGS_GENERAL"];
 ble.advSet1.advData1.GAP_ADTYPE_LOCAL_NAME_COMPLETE = true;
-// Complete Local Name
-if(lpName == "LP_CC2652RB")
-{
-    ble.advSet1.advData1.completeLocalName = "Project Zero BAW";
-}
-else
-{
-    ble.advSet1.advData1.completeLocalName = "Project Zero";
-}
-// More 128-bit UUIDs available
-ble.advSet1.scanRes1.GAP_ADTYPE_128BIT_MORE = true;
-// Num of UUIDs (128-bit More)
-ble.advSet1.scanRes1.numOfUUIDs128More = 1;
-// UUID 0 (128-bit More)
-ble.advSet1.scanRes1.UUID0128More = system.utils.bigInt("B000405104101100F0",16);
+ble.advSet1.advData1.completeLocalName              = "Project Zero";
+ble.advSet1.scanRes1.$name                          = "ti_ble5stack_broadcaster_advertisement_data1";
+ble.advSet1.scanRes1.GAP_ADTYPE_128BIT_MORE         = true;
+ble.advSet1.scanRes1.numOfUUIDs128More              = 1;
+ble.advSet1.scanRes1.UUID0128More                   = system.utils.bigInt("B000405104101100F0",16);
+
+CCFG.enableCodeGeneration = false;
+CCFG.ccfgTemplate.$name   = "ti_devices_CCFGTemplateInit0";
+
+Display1.$name                          = "CONFIG_Display_0";
+Display1.$hardware                      = system.deviceData.board.components.XDS110UART;
+Display1.enableANSI                     = true;
+Display1.uartBufferSize                 = 128;
+Display1.uart.$name                     = "CONFIG_DISPLAY_UART";
+Display1.uart.txPinInstance.outputState = "High";
+Display1.uart.txPinInstance.$name       = "CONFIG_PIN_UART_TX";
+Display1.uart.rxPinInstance.$name       = "CONFIG_PIN_UART_RX";
+
+AESCCM1.$name = "CONFIG_AESCCM0";
+
+AESCTRDRBG1.$name              = "CONFIG_AESCTRDRBG_0";
+AESCTRDRBG1.aesctrObject.$name = "CONFIG_AESCTR_0";
+
+AESECB1.$name = "CONFIG_AESECB0";
+
+ECDH1.$name = "CONFIG_ECDH0";
+
+GPIO1.$hardware         = system.deviceData.board.components["BTN-1"];
+GPIO1.mode              = "Dynamic";
+GPIO1.$name             = "CONFIG_GPIO_BTN1";
+GPIO1.pinInstance.$name = "CONFIG_PIN_BTN1";
+
+GPIO2.$hardware         = system.deviceData.board.components["BTN-2"];
+GPIO2.mode              = "Dynamic";
+GPIO2.$name             = "CONFIG_GPIO_BTN2";
+GPIO2.pinInstance.$name = "CONFIG_PIN_BTN2";
+
+GPIO3.$hardware         = system.deviceData.board.components.LED_RED;
+GPIO3.mode              = "Dynamic";
+GPIO3.$name             = "CONFIG_GPIO_RLED";
+GPIO3.pinInstance.$name = "CONFIG_PIN_RLED";
+
+GPIO4.$hardware         = system.deviceData.board.components.LED_GREEN;
+GPIO4.mode              = "Dynamic";
+GPIO4.$name             = "CONFIG_GPIO_GLED";
+GPIO4.pinInstance.$name = "CONFIG_PIN_GLED";
+
+GPIO6.$name             = "CONFIG_GPIO_LOCK";
+GPIO6.mode              = "Output";
+GPIO6.gpioPin.$assign   = "boosterpack.23";
+GPIO6.pinInstance.$name = "CONFIG_PIN_4";
+
+GPIO7.$name             = "CONFIG_GPIO_UNLOCK";
+GPIO7.mode              = "Output";
+GPIO7.gpioPin.$assign   = "boosterpack.24";
+GPIO7.pinInstance.$name = "CONFIG_PIN_5";
+
+GPIO8.$name             = "CONFIG_GPIO_TRUNK";
+GPIO8.mode              = "Output";
+GPIO8.gpioPin.$assign   = "boosterpack.25";
+GPIO8.pinInstance.$name = "CONFIG_PIN_6";
+
+GPIO9.$name             = "CONFIG_GPIO_LIGHT";
+GPIO9.mode              = "Output";
+GPIO9.gpioPin.$assign   = "boosterpack.26";
+GPIO9.pinInstance.$name = "CONFIG_PIN_7";
+
+GPIO10.$name             = "CONFIG_GPIO_ENGINE";
+GPIO10.mode              = "Output";
+GPIO10.pinInstance.$name = "CONFIG_PIN_8";
+
+GPIO11.$name             = "CONFIG_GPIO_HORN";
+GPIO11.mode              = "Output";
+GPIO11.pinInstance.$name = "CONFIG_PIN_9";
+
+GPIO12.$name             = "CONFIG_GPIO_PANIC";
+GPIO12.mode              = "Output";
+GPIO12.gpioPin.$assign   = "boosterpack.29";
+GPIO12.pinInstance.$name = "CONFIG_PIN_10";
+
+GPIO13.$name             = "CONFIG_GPIO_PROCESS";
+GPIO13.mode              = "Output";
+GPIO13.gpioPin.$assign   = "boosterpack.30";
+GPIO13.pinInstance.$name = "CONFIG_PIN_11";
+
+NVS1.$name                    = "CONFIG_NVSINTERNAL";
+NVS1.internalFlash.$name      = "ti_drivers_nvs_NVSCC26XX0";
+NVS1.internalFlash.regionBase = 0x48000;
+NVS1.internalFlash.regionSize = 0x4000;
+
+NVS2.$hardware                      = system.deviceData.board.components.MX25R8035F;
+NVS2.$name                          = "CONFIG_NVSEXTERNAL";
+NVS2.externalFlash.$name            = "ti_drivers_nvs_NVSSPI25X0";
+NVS2.externalFlash.verifyBufferSize = 64;
+
+TRNG1.$name = "CONFIG_TRNG_0";
+
+const NVSSPI25XDevice                                      = scripting.addModule("/ti/drivers/nvs/NVSSPI25XDevice", {}, false);
+const NVSSPI25XDevice1                                     = NVSSPI25XDevice.addInstance({}, false);
+NVSSPI25XDevice1.$name                                     = "CONFIG_NVS_SPI_0";
+NVS2.externalFlash.spiFlashDevice                          = NVSSPI25XDevice1;
+NVSSPI25XDevice1.slaveSelectGpioInstance.$name             = "CONFIG_GPIO_0";
+NVSSPI25XDevice1.slaveSelectGpioInstance.pinInstance.$name = "CONFIG_PIN_0";
+
+const SPI                          = scripting.addModule("/ti/drivers/SPI", {}, false);
+const SPI1                         = SPI.addInstance({}, false);
+SPI1.$name                         = "CONFIG_SPI_0";
+NVSSPI25XDevice1.sharedSpiInstance = SPI1;
+SPI1.sclkPinInstance.$name         = "CONFIG_PIN_1";
+SPI1.misoPinInstance.$name         = "CONFIG_PIN_2";
+SPI1.mosiPinInstance.$name         = "CONFIG_PIN_3";
+
+/**
+ * Pinmux solution for unlocked pins/peripherals. This ensures that minor changes to the automatic solver in a future
+ * version of the tool will not impact the pinmux you originally saw.  These lines can be completely deleted in order to
+ * re-solve from scratch.
+ */
+Display1.uart.uart.$suggestSolution                               = "UART1";
+Display1.uart.uart.txPin.$suggestSolution                         = "boosterpack.4";
+Display1.uart.uart.rxPin.$suggestSolution                         = "boosterpack.3";
+GPIO1.gpioPin.$suggestSolution                                    = "boosterpack.13";
+GPIO2.gpioPin.$suggestSolution                                    = "boosterpack.12";
+GPIO3.gpioPin.$suggestSolution                                    = "boosterpack.39";
+GPIO4.gpioPin.$suggestSolution                                    = "boosterpack.40";
+GPIO10.gpioPin.$suggestSolution                                   = "boosterpack.9";
+GPIO11.gpioPin.$suggestSolution                                   = "boosterpack.10";
+NVSSPI25XDevice1.slaveSelectGpioInstance.gpioPin.$suggestSolution = "boosterpack.38";
+SPI1.spi.$suggestSolution                                         = "SSI0";
+SPI1.spi.sclkPin.$suggestSolution                                 = "boosterpack.7";
+SPI1.spi.misoPin.$suggestSolution                                 = "boosterpack.14";
+SPI1.spi.mosiPin.$suggestSolution                                 = "boosterpack.15";
+SPI1.spi.dmaRxChannel.$suggestSolution                            = "DMA_CH3";
+SPI1.spi.dmaTxChannel.$suggestSolution                            = "DMA_CH4";
