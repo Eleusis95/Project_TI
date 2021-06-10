@@ -2474,7 +2474,9 @@ static uint8_t checkingsize(uint8_t receivedmsg[]){
     uint8_t OK;
     if(msgLen == 47){
        // Log_info1("The message's len is correct %d", (uintptr_t)msgLen);
+        PIN_setOutputValue(ledPinHandle, OutPut_PROCESS, 1);
         OK = dividongMsg(receivedmsg);
+        //PIN_setOutputValue(ledPinHandle, OutPut_PROCESS, 0);
         return 1;
     }
     else{
@@ -2551,29 +2553,36 @@ static uint8_t gettingCommand(uint8_t receivedmsg[]){
       }
      memcpy(plain_text.Data, padded_msg,16);
      actionfound = command_number(plain_text);
+     PIN_setOutputValue(ledPinHandle, OutPut_PROCESS, 0);
      switch (actionfound)
           {
            case Lock:
                PIN_setOutputValue(ledPinHandle, OutPut_LOCK, 1);
                PIN_setOutputValue(ledPinHandle, OutPut_TRUNK, 1);
+               DataService_SetParameter(DS_STRING_ID, 4, "LOCK");
                Log_info0("\n command : Lock\n");
+               //PIN_setOutputValue(ledPinHandle, OutPut_PROCESS, 0);
              break;
            case UnLock:
                PIN_setOutputValue(ledPinHandle, OutPut_LOCK, 0);
+               DataService_SetParameter(DS_STRING_ID, 6, "UNLOCK");
                Log_info0("\n command : UnLock\n");
              break;
           case Truck:
               PIN_setOutputValue(ledPinHandle, OutPut_TRUNK, 0);
+              DataService_SetParameter(DS_STRING_ID, 5, "TRUNK");
               Log_info0("\n command : Truck\n");
              break;
           case Light:
               lightState = !(PIN_getOutputValue(OutPut_LIGHT));
               PIN_setOutputValue(ledPinHandle, OutPut_LIGHT, lightState);
+              DataService_SetParameter(DS_STRING_ID, 5, "LIGHT");
               Log_info0("\n command : Light\n");
              break;
           case Engine:
               engineState = !(PIN_getOutputValue(OutPut_ENGINE));
-              PIN_setOutputValue(ledPinHandle, OutPut_ENGINE, 1);
+              PIN_setOutputValue(ledPinHandle, OutPut_ENGINE, engineState);
+              DataService_SetParameter(DS_STRING_ID, 6, "ENGINE");
               Log_info0("\n command : Engine\n");
               break;
           case Horn:
@@ -2583,6 +2592,7 @@ static uint8_t gettingCommand(uint8_t receivedmsg[]){
               PIN_setOutputValue(ledPinHandle, OutPut_HORN, 0);
               delay();
               }
+              DataService_SetParameter(DS_STRING_ID, 4, "HORN");
               Log_info0("\n command : Horn\n");
              break;
           case Panic:
@@ -2594,6 +2604,7 @@ static uint8_t gettingCommand(uint8_t receivedmsg[]){
                   PIN_setOutputValue(ledPinHandle, OutPut_LIGHT, 0);
                   delay();
                  }
+              DataService_SetParameter(DS_STRING_ID, 5, "PANIC");
               Log_info0("\n command : Panic\n");
              break;
           case NoAction:
